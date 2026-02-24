@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I ate that</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & VARIABLES ─── */
+:root {
+  --cream: #F6F0D7;
+  --lime:  #C5D89D;
+  --sage:  #9CAB84;
+  --forest:#89986D;
+  --dark:  #2E3A22;
+  --text:  #3a3a2e;
+  --muted: #7a7a60;
+  --white: #ffffff;
+  --r:     12px;
+  --rl:    20px;
+  --sh:    0 4px 24px rgba(46,58,34,.10);
+  --shl:   0 12px 40px rgba(46,58,34,.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); font-size: 15px; line-height: 1.6; }
+h1,h2,h3 { font-family: 'Fraunces', serif; }
+a { text-decoration: none; color: inherit; }
+
+/* ─── PAGE ROUTING via :target ─── */
+/* All pages hidden by default */
+.page { display: none; }
+/* Show page when its ID is targeted */
+#feed:target,
+#detail:target,
+#create:target,
+#profile:target,
+#auth:target { display: block; }
+/* Default: show feed if nothing targeted */
+body:not(:has(:target)) #feed { display: block; }
+
+/* ─── NAV ─── */
+nav {
+  background: var(--dark);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(46,58,34,.3);
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.nav-links { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+.nav-link {
+  color: rgba(246,240,215,.7);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all .2s;
+  display: inline-block;
+}
+.nav-link:hover { color: var(--cream); background: rgba(255,255,255,.08); }
+.nav-link.active { color: var(--dark); background: var(--lime); font-weight: 600; }
+.nav-search {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px;
+  padding: 6px 12px;
+  gap: 8px;
+  width: 200px;
+}
+.nav-search input {
+  background: none; border: none; outline: none;
+  color: var(--cream); font-size: 13px; width: 100%;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-search input::placeholder { color: rgba(246,240,215,.5); }
+.nav-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--sage);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700;
+  border: 2px solid var(--lime);
+  color: var(--dark);
+  transition: transform .2s;
+}
+.nav-avatar:hover { transform: scale(1.05); }
+.btn-login {
+  background: var(--lime); color: var(--dark);
+  padding: 8px 18px; border-radius: 8px;
+  font-weight: 600; font-size: 14px;
+  transition: all .2s; display: inline-block;
+}
+.btn-login:hover { background: var(--cream); }
+
+/* Active nav link highlighting via :target */
+#feed:target    ~ nav .link-feed,
+body:not(:has(:target)) ~ nav .link-feed { color: var(--dark); background: var(--lime); font-weight: 600; }
+
+/* We handle active nav with sibling trick on each page using general sibling */
+/* Since nav is BEFORE pages in DOM, we use a different approach: */
+/* wrap pages in a container and use CSS sibling selectors */
+
+/* ─── LAYOUT ─── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ─── FEED PAGE ─── */
+.feed-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  padding: 40px 0;
+}
+.feed-hero {
+  text-align: center;
+  padding: 48px 24px 36px;
+  background: linear-gradient(135deg, var(--sage), var(--forest));
+  border-radius: var(--rl);
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.feed-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,.08);
+  border-radius: 50%;
+}
+.feed-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -20px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,.05);
+  border-radius: 50%;
+}
+.feed-hero h1 { font-size: 36px; color: var(--cream); font-weight: 900; margin-bottom: 10px; position: relative; z-index: 1; }
+.feed-hero p  { color: rgba(246,240,215,.85); font-size: 15px; margin-bottom: 24px; position: relative; z-index: 1; }
+
+.btn-cta {
+  background: var(--cream); color: var(--dark);
+  padding: 14px 32px; border-radius: var(--r);
+  font-weight: 700; font-size: 15px;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all .25s; position: relative; z-index: 1;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+}
+.btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25); background: white; color: var(--dark); }
+
+/* RECIPE CARDS */
+.recipe-card {
+  background: var(--white);
+  border-radius: var(--rl);
+  box-shadow: var(--sh);
+  overflow: hidden;
+  transition: all .3s;
+  margin-bottom: 20px;
+  animation: fadeUp .4s ease both;
+  display: block;
+  color: var(--text);
+}
+.recipe-card:hover { transform: translateY(-3px); box-shadow: var(--shl); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.recipe-card:nth-child(1) { animation-delay: .05s; }
+.recipe-card:nth-child(2) { animation-delay: .10s; }
+.recipe-card:nth-child(3) { animation-delay: .15s; }
+
+.card-img {
+  width: 100%; height: 220px;
+  background: linear-gradient(135deg, var(--lime), var(--sage));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px; position: relative;
+}
+.card-img-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(46,58,34,.75); backdrop-filter: blur(8px);
+  color: var(--cream); padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+}
+.card-body { padding: 18px 20px 16px; }
+.card-author { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.author-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--lime); display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--dark); flex-shrink: 0;
+}
+.author-name { font-size: 13px; font-weight: 600; color: var(--muted); }
+.author-time { font-size: 12px; color: var(--muted); margin-left: auto; }
+.card-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+.card-desc { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.card-meta { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.meta-pill {
+  background: var(--cream); color: var(--forest);
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 500;
+  border: 1px solid rgba(137,152,109,.3);
+}
+.card-footer {
+  display: flex; align-items: center; gap: 4px;
+  padding-top: 12px; border-top: 1px solid rgba(0,0,0,.06);
+}
+.react-pill {
+  background: none; border: 1px solid transparent;
+  padding: 5px 10px; border-radius: 8px;
+  font-size: 13px; color: var(--muted);
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: all .2s; font-weight: 500;
+}
+.react-pill:hover { background: var(--cream); border-color: var(--lime); color: var(--dark); }
+.react-pill.liked { color: #e05c5c; background: #fff0f0; border-color: #ffd0d0; }
+.btn-recipe {
+  margin-left: auto; background: var(--forest); color: var(--cream);
+  padding: 7px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  transition: all .2s; display: inline-block;
+}
+.btn-recipe:hover { background: var(--dark); }
+
+/* SIDEBAR */
+.sidebar { position: sticky; top: 88px; }
+.sidebar-card { background: var(--white); border-radius: var(--rl); box-shadow: var(--sh); padding: 20px; margin-bottom: 20px; }
+.sidebar-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 14px; }
+.filter-group { margin-bottom: 14px; }
+.filter-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-bottom: 7px; display: block; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  background: var(--cream); border: 1.5px solid var(--lime); color: var(--forest);
+  padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all .18s; display: inline-block;
+}
+.chip:hover { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+
+/* Chip active state using checkbox trick */
+.chip-check { display: none; }
+.chip-check:checked + .chip { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+
+.trending-item {
+  display: flex; gap: 10px; padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,.05);
+  transition: all .2s; align-items: center;
+}
+.trending-item:last-child { border-bottom: none; }
+.trending-item:hover { padding-left: 4px; }
+.trending-num { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--lime); width: 24px; flex-shrink: 0; }
+.trending-text { font-size: 13px; }
+.trending-meta { font-size: 11px; color: var(--muted); }
+
+/* ─── DETAIL PAGE ─── */
+.detail-layout { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--forest); font-weight: 600; font-size: 14px;
+  margin-bottom: 20px; transition: all .2s;
+}
+.back-link:hover { color: var(--dark); gap: 10px; }
+.detail-hero-img {
+  width: 100%; height: 380px;
+  background: linear-gradient(135deg, var(--lime), var(--sage), var(--forest));
+  border-radius: var(--rl);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 100px; margin-bottom: 32px;
+  box-shadow: var(--shl);
+}
+.detail-title { font-size: 40px; font-weight: 900; color: var(--dark); line-height: 1.1; margin-bottom: 12px; }
+.detail-author-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.detail-author-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--sage); display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: var(--dark);
+}
+.detail-author-name { font-weight: 600; color: var(--dark); }
+.detail-author-date { font-size: 13px; color: var(--muted); }
+.detail-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.pill-lg {
+  background: var(--cream); border: 1.5px solid var(--lime); color: var(--dark);
+  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+}
+.detail-description { font-size: 16px; line-height: 1.7; color: var(--text); margin-bottom: 32px; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+.info-box { background: var(--white); border-radius: var(--rl); padding: 24px; box-shadow: var(--sh); }
+.info-box-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
+.ingredient-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: 14px;
+}
+.ingredient-item:last-child { border-bottom: none; }
+.ingredient-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); flex-shrink: 0; }
+.step-item { display: flex; gap: 14px; margin-bottom: 14px; }
+.step-num {
+  width: 28px; height: 28px; background: var(--sage); color: var(--dark);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 1px;
+}
+.step-text { font-size: 14px; line-height: 1.6; padding-top: 3px; }
+.interaction-bar {
+  background: var(--white); border-radius: var(--rl); padding: 16px 20px;
+  box-shadow: var(--sh); display: flex; align-items: center; gap: 8px;
+  margin-bottom: 32px; flex-wrap: wrap;
+}
+.int-btn {
+  background: var(--cream); border: 1.5px solid var(--lime);
+  padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--dark); transition: all .2s;
+}
+.int-btn:hover { background: var(--lime); }
+.int-btn-danger {
+  margin-left: auto; background: #fff0f0; border: 1.5px solid #ffd0d0; color: #c0392b;
+  padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px; transition: all .2s;
+}
+.int-btn-danger:hover { background: #ffe0e0; }
+
+/* LIKE toggle with checkbox */
+.like-toggle { display: none; }
+.like-toggle:checked + .int-btn { color: #e05c5c; background: #fff0f0; border-color: #ffd0d0; }
+
+/* SAVE toggle */
+.save-toggle { display: none; }
+.save-toggle:checked + .int-btn { background: var(--sage); color: var(--dark); border-color: var(--forest); }
+
+.section-heading { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 20px; }
+.comment-form-row { display: flex; gap: 10px; margin-bottom: 20px; align-items: flex-start; }
+.comment-input {
+  flex: 1; border: 1.5px solid var(--lime); border-radius: var(--r);
+  padding: 10px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+  background: var(--white); outline: none; resize: none; color: var(--text);
+  transition: border-color .2s;
+}
+.comment-input:focus { border-color: var(--forest); }
+.btn-send {
+  background: var(--forest); color: var(--cream);
+  padding: 10px 20px; border-radius: var(--r);
+  font-weight: 600; font-size: 14px;
+  transition: all .2s; white-space: nowrap;
+  border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+.btn-send:hover { background: var(--dark); }
+.comment-item { display: flex; gap: 12px; margin-bottom: 16px; }
+.comment-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--lime); display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: var(--dark); flex-shrink: 0;
+}
+.comment-bubble {
+  background: var(--white); border-radius: 0 12px 12px 12px;
+  padding: 12px 16px; box-shadow: var(--sh); flex: 1;
+}
+.comment-author { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+.comment-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+.comment-time { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.divider { border: none; border-top: 2px solid var(--cream); margin: 24px 0; }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.mini-recipe-card {
+  background: var(--white); border-radius: var(--r); overflow: hidden;
+  box-shadow: var(--sh); display: block; color: var(--text); transition: all .2s;
+}
+.mini-recipe-card:hover { transform: translateY(-2px); box-shadow: var(--shl); }
+.mini-card-img {
+  height: 100px; background: linear-gradient(135deg, var(--lime), var(--sage));
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+}
+.mini-card-body { padding: 10px 12px; }
+.mini-card-title { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+.mini-card-meta { font-size: 11px; color: var(--muted); }
+
+/* ─── CREATE PAGE ─── */
+.create-layout { max-width: 680px; margin: 0 auto; padding: 40px 24px; }
+.create-title { font-size: 32px; font-weight: 900; color: var(--dark); margin-bottom: 8px; }
+.create-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+.form-section { background: var(--white); border-radius: var(--rl); padding: 24px; margin-bottom: 20px; box-shadow: var(--sh); }
+.form-section-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1.5px solid var(--cream); }
+.form-group { margin-bottom: 16px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-label { display: block; font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.form-input, .form-textarea {
+  width: 100%; border: 1.5px solid var(--lime); border-radius: var(--r);
+  padding: 10px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+  background: var(--cream); outline: none; color: var(--text);
+  transition: border-color .2s, background .2s;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--forest); background: var(--white); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 2px dashed var(--sage); border-radius: var(--rl);
+  background: linear-gradient(135deg, rgba(197,216,157,.15), rgba(156,171,132,.1));
+  padding: 40px; text-align: center; cursor: pointer; transition: all .2s;
+}
+.upload-area:hover { border-color: var(--forest); background: rgba(197,216,157,.25); }
+.upload-icon { font-size: 40px; margin-bottom: 10px; }
+.upload-text { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 5px; }
+.upload-sub { font-size: 12px; color: var(--muted); }
+.budget-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* Budget radio styling */
+.budget-radio { display: none; }
+.budget-label-ui {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border: 1.5px solid var(--lime); border-radius: var(--r);
+  cursor: pointer; transition: all .2s; background: var(--cream); font-size: 13px;
+  margin-bottom: 8px;
+}
+.budget-label-ui:hover { background: rgba(197,216,157,.2); }
+.budget-radio:checked + .budget-label-ui { border-color: var(--forest); background: rgba(137,152,109,.12); }
+.radio-dot {
+  width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--sage);
+  flex-shrink: 0; display: inline-block; position: relative;
+}
+.budget-radio:checked + .budget-label-ui .radio-dot { border-color: var(--forest); }
+.budget-radio:checked + .budget-label-ui .radio-dot::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px; border-radius: 50%; background: var(--forest);
+}
+
+.step-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+.step-badge-sm {
+  width: 28px; height: 28px; background: var(--sage); color: var(--dark);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 6px;
+}
+.tag-badge {
+  background: var(--sage); color: var(--dark);
+  padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block;
+}
+.tags-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tag-input {
+  border: 1.5px dashed var(--sage); border-radius: 20px;
+  padding: 4px 12px; font-size: 12px; background: transparent; outline: none;
+  color: var(--text); font-family: 'DM Sans', sans-serif; width: 100px;
+}
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+.btn-cancel {
+  background: none; border: 1.5px solid var(--lime); color: var(--forest);
+  padding: 12px 24px; border-radius: var(--r); font-weight: 600; font-size: 15px;
+  transition: all .2s; display: inline-block;
+}
+.btn-cancel:hover { background: var(--cream); }
+.btn-publish {
+  background: var(--forest); color: var(--cream);
+  padding: 12px 32px; border-radius: var(--r); font-weight: 700; font-size: 15px;
+  display: inline-flex; align-items: center; gap: 8px; transition: all .25s;
+  box-shadow: 0 4px 14px rgba(137,152,109,.4);
+}
+.btn-publish:hover { background: var(--dark); transform: translateY(-1px); }
+
+/* ─── PROFILE PAGE ─── */
+.profile-banner { background: linear-gradient(135deg, var(--dark), var(--forest)); height: 180px; }
+.profile-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.profile-avatar-wrap { position: relative; }
+.profile-avatar {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: var(--lime); border: 5px solid var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; font-weight: 700; color: var(--dark); box-shadow: var(--sh);
+  margin-top: -55px;
+}
+.profile-info-row {
+  display: flex; align-items: flex-end; padding-top: 16px; gap: 16px; padding-bottom: 8px;
+}
+.profile-username { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 900; color: var(--dark); margin-bottom: 4px; }
+.profile-meta-text { font-size: 13px; color: var(--muted); }
+.profile-stats { display: flex; gap: 24px; margin-top: 12px; }
+.stat-val { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--dark); }
+.stat-lbl { font-size: 12px; color: var(--muted); }
+.btn-edit-profile {
+  background: var(--cream); color: var(--dark); border: 1.5px solid var(--lime);
+  padding: 9px 20px; border-radius: var(--r); font-weight: 600; font-size: 14px;
+  display: inline-block; transition: all .2s; white-space: nowrap; margin-left: auto;
+}
+.btn-edit-profile:hover { background: var(--lime); }
+
+/* Profile tabs — CSS only with radio buttons */
+.tab-radios { display: none; }
+.profile-tabs { display: flex; gap: 4px; padding: 24px 0 0; border-bottom: 2px solid rgba(0,0,0,.07); margin-bottom: 28px; }
+.ptab-label {
+  padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--muted);
+  cursor: pointer; border-radius: 8px 8px 0 0; transition: all .2s;
+  position: relative; bottom: -2px; border-bottom: 3px solid transparent;
+}
+.ptab-label:hover { color: var(--dark); }
+#tab-recipes:checked ~ .profile-tabs .ptab-label[for="tab-recipes"],
+#tab-saved:checked   ~ .profile-tabs .ptab-label[for="tab-saved"],
+#tab-settings:checked ~ .profile-tabs .ptab-label[for="tab-settings"] {
+  color: var(--forest); border-bottom-color: var(--forest);
+  background: rgba(137,152,109,.08);
+}
+.tab-panels { position: relative; }
+.tab-panel { display: none; }
+#tab-recipes:checked  ~ .tab-panels #panel-recipes,
+#tab-saved:checked    ~ .tab-panels #panel-saved,
+#tab-settings:checked ~ .tab-panels #panel-settings { display: block; }
+/* Default first tab */
+body:not(:has(#tab-saved:checked)):not(:has(#tab-settings:checked)) #panel-recipes,
+body:not(:has(#tab-saved:checked)):not(:has(#tab-settings:checked)) .ptab-label[for="tab-recipes"] {
+  display: block;
+  color: var(--forest);
+  border-bottom-color: var(--forest);
+  background: rgba(137,152,109,.08);
+}
+
+.recipes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.profile-card {
+  background: var(--white); border-radius: var(--rl); overflow: hidden;
+  box-shadow: var(--sh); transition: all .2s;
+}
+.profile-card:hover { transform: translateY(-2px); box-shadow: var(--shl); }
+.profile-card-img {
+  height: 120px; background: linear-gradient(135deg, var(--lime), var(--sage));
+  display: flex; align-items: center; justify-content: center; font-size: 40px;
+}
+.profile-card-body { padding: 12px 14px; }
+.profile-card-title { font-weight: 600; color: var(--dark); font-size: 14px; margin-bottom: 4px; }
+.profile-card-meta { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.profile-card-actions { display: flex; gap: 6px; }
+.btn-edit-sm {
+  flex: 1; background: var(--cream); border: 1.5px solid var(--lime); color: var(--forest);
+  padding: 5px 10px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  display: inline-block; text-align: center; transition: all .18s;
+}
+.btn-edit-sm:hover { background: var(--lime); }
+.btn-delete-sm {
+  background: #fff0f0; border: 1.5px solid #ffd0d0; color: #c0392b;
+  padding: 5px 8px; border-radius: 7px; font-size: 12px; display: inline-block; transition: all .18s;
+}
+.btn-delete-sm:hover { background: #ffe0e0; }
+.add-new-card {
+  border: 2px dashed var(--sage); border-radius: var(--rl); min-height: 200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; color: var(--sage); transition: all .2s;
+}
+.add-new-card:hover { border-color: var(--forest); color: var(--forest); background: rgba(197,216,157,.1); }
+.settings-form { max-width: 480px; }
+
+/* ─── AUTH PAGE ─── */
+.auth-page {
+  min-height: calc(100vh - 64px);
+  display: flex; align-items: center; justify-content: center; padding: 40px 24px;
+  background: radial-gradient(ellipse at 30% 20%, rgba(197,216,157,.35), transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(156,171,132,.25), transparent 60%);
+}
+.auth-card {
+  background: var(--white); border-radius: var(--rl); box-shadow: var(--shl);
+  overflow: hidden; width: 100%; max-width: 820px;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.auth-aside {
+  background: linear-gradient(135deg, var(--dark), var(--forest));
+  padding: 48px 40px; display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.auth-aside::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 200px; height: 200px; background: rgba(255,255,255,.06); border-radius: 50%;
+}
+.auth-aside-emoji { font-size: 64px; margin-bottom: 20px; position: relative; z-index: 1; }
+.auth-aside-logo { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 900; color: var(--cream); margin-bottom: 16px; position: relative; z-index: 1; }
+.auth-aside-text { font-size: 15px; color: rgba(246,240,215,.8); line-height: 1.7; position: relative; z-index: 1; }
+.auth-form-panel { padding: 40px; }
+
+/* Auth tab switching via radio */
+.auth-tab-radio { display: none; }
+.auth-tabs { display: flex; border-bottom: 2px solid var(--cream); margin-bottom: 28px; }
+.auth-tab-label {
+  padding: 8px 20px; font-size: 14px; font-weight: 600; color: var(--muted);
+  cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .2s;
+}
+.auth-tab-label:hover { color: var(--forest); }
+#atab-login:checked    ~ .auth-tabs .auth-tab-label[for="atab-login"],
+#atab-register:checked ~ .auth-tabs .auth-tab-label[for="atab-register"] {
+  color: var(--forest); border-bottom-color: var(--forest);
+}
+.auth-form-panel-inner { position: relative; }
+.auth-panel { display: none; }
+#atab-login:checked    ~ .auth-form-panel-inner #form-login,
+#atab-register:checked ~ .auth-form-panel-inner #form-register { display: block; }
+body:not(:has(#atab-register:checked)) #form-login { display: block; }
+body:not(:has(#atab-register:checked)) .auth-tab-label[for="atab-login"] {
+  color: var(--forest); border-bottom-color: var(--forest);
+}
+
+.btn-auth {
+  width: 100%; background: var(--forest); color: var(--cream);
+  padding: 13px; border-radius: var(--r); font-weight: 700; font-size: 15px;
+  border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  margin-top: 4px; box-shadow: 0 4px 14px rgba(137,152,109,.35);
+  display: block; text-align: center; transition: all .2s;
+}
+.btn-auth:hover { background: var(--dark); transform: translateY(-1px); }
+.auth-link { text-align: center; margin-top: 14px; font-size: 12px; color: var(--muted); }
+.auth-link a { color: var(--forest); font-weight: 600; }
+.auth-link a:hover { color: var(--dark); text-decoration: underline; }
+.auth-terms { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; line-height: 1.5; }
+.auth-terms a { color: var(--forest); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--dark); color: rgba(246,240,215,.6);
+  padding: 24px; font-size: 12px; text-align: center; margin-top: 0;
+}
+footer a { color: rgba(246,240,215,.6); text-decoration: none; margin: 0 10px; }
+footer a:hover { color: var(--lime); }
+
+/* ─── SPACING UTILS ─── */
+.mt4  { margin-top:  4px; }
+.mt8  { margin-top:  8px; }
+.mt12 { margin-top: 12px; }
+.mt16 { margin-top: 16px; }
+.mt24 { margin-top: 24px; }
+.mb16 { margin-bottom: 16px; }
+.ml-auto { margin-left: auto; }
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; }
+.gap6 { gap: 6px; }
+.gap8 { gap: 8px; }
+.gap10 { gap: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.italic-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.creator-badge { font-size: 11px; color: var(--forest); font-weight: 500; }
+.owner-bubble { background: rgba(197,216,157,.2); border: 1px solid var(--lime); }
+</style>
+</head>
+<body>
+
+<!-- ─── NAVIGATION ─── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#feed" class="brand">🍜 I ate that</a>
+    <div class="nav-search">
+      <span>🔍</span>
+      <input type="text" placeholder="Sök recept...">
+    </div>
+    <div class="nav-links">
+      <a href="#feed"    class="nav-link">Feed</a>
+      <a href="#create"  class="nav-link">+ Lägg upp</a>
+      <a href="#profile" class="nav-link">Min profil</a>
+      <a href="#profile" class="nav-avatar">L</a>
+      <a href="#auth"    class="btn-login">Logga ut</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 1: FEED                                   -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="feed" class="page">
+  <div class="container">
+    <div class="feed-layout">
+
+      <main>
+        <!-- HERO -->
+        <div class="feed-hero">
+          <h1>Vad åt du idag? 🍝</h1>
+          <p>Dela studentköksmagi. Inga domar, bara mat.</p>
+          <a href="#create" class="btn-cta">+ Lägg upp din matsedel</a>
+        </div>
+
+        <!-- CARD 1 -->
+        <a href="#detail" class="recipe-card">
+          <div class="card-img">🍝<span class="card-img-badge">⏰ 15 min</span></div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar">L</div>
+              <span class="author-name">student_lisa</span>
+              <span class="author-time">2 timmar sedan</span>
+            </div>
+            <div class="card-title">Pastaskogen</div>
+            <div class="card-desc">Snabb pasta med det man har hemma — ketchup ingår</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸💸 Billig</span>
+              <span class="meta-pill">🌿 pasta</span>
+              <span class="meta-pill">⚡ snabb</span>
+              <span class="meta-pill">🥦 veg</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill liked">❤️ 124</span>
+              <span class="react-pill">💬 23</span>
+              <span class="react-pill">📌 47</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="#detail" class="recipe-card">
+          <div class="card-img" style="background:linear-gradient(135deg,#f9d976,#f39f86)">🍳<span class="card-img-badge">⏰ 10 min</span></div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar" style="background:var(--cream)">N</div>
+              <span class="author-name">noobkocken</span>
+              <span class="author-time">5 timmar sedan</span>
+            </div>
+            <div class="card-title">Äggtillrättamakaroner</div>
+            <div class="card-desc">Klass-budget, max smak. Funkar faktiskt.</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸 Mycket billig</span>
+              <span class="meta-pill">🥚 ägg</span>
+              <span class="meta-pill">⚡ budget</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill">❤️ 88</span>
+              <span class="react-pill">💬 9</span>
+              <span class="react-pill">📌 31</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 3 -->
+        <a href="#detail" class="recipe-card">
+          <div class="card-img" style="background:linear-gradient(135deg,#a8e063,#56ab2f)">🍜<span class="card-img-badge">⏰ 5 min</span></div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar" style="background:var(--sage)">R</div>
+              <span class="author-name">ramenlover_98</span>
+              <span class="author-time">igår</span>
+            </div>
+            <div class="card-title">Ketchupramen</div>
+            <div class="card-desc">Lägsta möjliga insats, faktiskt äckligt gott</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸 Mycket billig</span>
+              <span class="meta-pill">🍜 ramen</span>
+              <span class="meta-pill">⚡ snabb</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill">❤️ 211</span>
+              <span class="react-pill">💬 44</span>
+              <span class="react-pill">📌 89</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
+        </a>
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-title">🔎 Filtrera</div>
+          <div class="filter-group">
+            <span class="filter-label">Budgetnivå</span>
+            <div class="filter-chips">
+              <input type="checkbox" id="f1" class="chip-check" checked><label for="f1" class="chip">💸 Billigast</label>
+              <input type="checkbox" id="f2" class="chip-check" checked><label for="f2" class="chip">💸💸 Billig</label>
+              <input type="checkbox" id="f3" class="chip-check"><label for="f3" class="chip">💸💸💸 Medel</label>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Tid</span>
+            <div class="filter-chips">
+              <input type="checkbox" id="f4" class="chip-check" checked><label for="f4" class="chip">Under 15 min</label>
+              <input type="checkbox" id="f5" class="chip-check"><label for="f5" class="chip">15–30 min</label>
+              <input type="checkbox" id="f6" class="chip-check"><label for="f6" class="chip">30+ min</label>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Kategori</span>
+            <div class="filter-chips">
+              <input type="checkbox" id="f7" class="chip-check"><label for="f7" class="chip">🍝 pasta</label>
+              <input type="checkbox" id="f8" class="chip-check"><label for="f8" class="chip">🍜 nudlar</label>
+              <input type="checkbox" id="f9" class="chip-check"><label for="f9" class="chip">🥦 veg</label>
+              <input type="checkbox" id="f10" class="chip-check"><label for="f10" class="chip">🥚 ägg</label>
+              <input type="checkbox" id="f11" class="chip-check"><label for="f11" class="chip">🍲 soppa</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-title">🔥 Trending</div>
+          <div class="trending-item">
+            <div class="trending-num">1</div>
+            <div><div class="trending-text">Ketchupramen</div><div class="trending-meta">ramenlover_98 · ❤️ 211</div></div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">2</div>
+            <div><div class="trending-text">Pastaskogen</div><div class="trending-meta">student_lisa · ❤️ 124</div></div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">3</div>
+            <div><div class="trending-text">Äggtillrättamakaroner</div><div class="trending-meta">noobkocken · ❤️ 88</div></div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-title">🏷️ Populära taggar</div>
+          <div class="filter-chips">
+            <span class="chip">pasta</span>
+            <span class="chip">ramen</span>
+            <span class="chip">snabb</span>
+            <span class="chip">veg</span>
+            <span class="chip">budget</span>
+            <span class="chip">ägg</span>
+            <span class="chip">soppa</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <footer>
+    <a href="#">Om oss</a><a href="#">Kontakt</a><a href="#">Integritetspolicy</a>
+    <span style="margin-left:12px">© 2026 I ate that</span>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 2: RECIPE DETAIL                          -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="detail" class="page">
+  <div class="container">
+    <div class="detail-layout">
+      <a href="#feed" class="back-link">← Tillbaka till feed</a>
+
+      <div class="detail-hero-img">🍝</div>
+      <div class="detail-title">Pastaskogen</div>
+
+      <div class="detail-author-row">
+        <div class="detail-author-avatar">L</div>
+        <div>
+          <div class="detail-author-name">student_lisa</div>
+          <div class="detail-author-date">Publicerad 14 februari 2026</div>
+        </div>
+      </div>
+
+      <div class="detail-pills">
+        <span class="pill-lg">💸💸 Billig (2/5)</span>
+        <span class="pill-lg">⏰ 15 min</span>
+        <span class="pill-lg">🌿 pasta</span>
+        <span class="pill-lg">⚡ snabb</span>
+        <span class="pill-lg">🥦 veg</span>
+      </div>
+
+      <div class="detail-description">
+        Den klassiska studenträtten som räddat otaliga tentor-kvällar. Ingen bedömning här – vi gör det enkelt, vi gör det gott. Funkar med i princip vilken pasta som helst och ketchup som du har stående. Tillsätt lite smör så blir det faktiskt riktigt bra.
+      </div>
+
+      <div class="detail-grid">
+        <div class="info-box">
+          <div class="info-box-title">🛒 Ingredienser</div>
+          <div class="ingredient-item"><div class="ingredient-dot"></div>200g pasta (valfri sort)</div>
+          <div class="ingredient-item"><div class="ingredient-dot"></div>3 msk ketchup</div>
+          <div class="ingredient-item"><div class="ingredient-dot"></div>1 msk smör</div>
+          <div class="ingredient-item"><div class="ingredient-dot"></div>Salt och peppar</div>
+          <div class="ingredient-item"><div class="ingredient-dot"></div>(valfritt) 1 ägg</div>
+        </div>
+        <div class="info-box">
+          <div class="info-box-title">📋 Instruktioner</div>
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">Koka pastan enligt förpackningens anvisning i saltat vatten</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">Häll av vattnet och lägg tillbaka pastan i kastrullen</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">Blanda ner smöret medan pastan är varm</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">Tillsätt ketchup efter smak, rör om ordentligt</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">Smaka av med salt och peppar. Servera varmt!</div></div>
+        </div>
+      </div>
+
+      <!-- Interaction bar — CSS checkbox tricks for like + save -->
+      <div class="interaction-bar">
+        <input type="checkbox" id="like-toggle" class="like-toggle" checked>
+        <label for="like-toggle" class="int-btn" style="cursor:pointer">❤️ 124 Gilla</label>
+
+        <input type="checkbox" id="save-toggle" class="save-toggle">
+        <label for="save-toggle" class="int-btn" style="cursor:pointer">📌 Spara recept</label>
+
+        <a href="#" class="int-btn">💬 23 Kommentarer</a>
+        <a href="#create" class="int-btn" style="margin-left:auto">✏️ Redigera</a>
+        <a href="#feed" class="int-btn-danger">🗑️ Radera</a>
+      </div>
+
+      <!-- COMMENTS -->
+      <div class="section-heading">Kommentarer (23)</div>
+      <div class="comment-form-row">
+        <div class="comment-avatar">L</div>
+        <textarea class="comment-input" rows="2" placeholder="Skriv en kommentar..."></textarea>
+        <button class="btn-send">Skicka</button>
+      </div>
+
+      <div class="comment-item">
+        <div class="comment-avatar">R</div>
+        <div class="comment-bubble">
+          <div class="comment-author">ramenlover_98</div>
+          <div class="comment-text">Ser gott ut! Testade med soja istället för ketchup, blev faktiskt bra!</div>
+          <div class="comment-time">3 timmar sedan</div>
+        </div>
+      </div>
+      <div class="comment-item">
+        <div class="comment-avatar" style="background:var(--cream)">P</div>
+        <div class="comment-bubble">
+          <div class="comment-author">pasta4ever</div>
+          <div class="comment-text">Hur mycket pasta behövs egentligen? 200g räcker väl inte? 😅</div>
+          <div class="comment-time">6 timmar sedan</div>
+        </div>
+      </div>
+      <div class="comment-item">
+        <div class="comment-avatar">L</div>
+        <div class="comment-bubble owner-bubble">
+          <div class="comment-author">student_lisa <span class="creator-badge">· skapare</span></div>
+          <div class="comment-text">@pasta4ever haha du har rätt, gör dubbel sats om du är hungrig! 🍝</div>
+          <div class="comment-time">6 timmar sedan</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <div class="section-heading">Fler recept från student_lisa</div>
+      <div class="related-grid">
+        <a href="#detail" class="mini-recipe-card">
+          <div class="mini-card-img">🍜</div>
+          <div class="mini-card-body"><div class="mini-card-title">Ketchupramen</div><div class="mini-card-meta">💸 · ⏰ 5 min</div></div>
+        </a>
+        <a href="#detail" class="mini-recipe-card">
+          <div class="mini-card-img" style="background:linear-gradient(135deg,#f9d976,#f39f86)">🍳</div>
+          <div class="mini-card-body"><div class="mini-card-title">Äggröra DX</div><div class="mini-card-meta">💸 · ⏰ 8 min</div></div>
+        </a>
+        <a href="#detail" class="mini-recipe-card">
+          <div class="mini-card-img" style="background:linear-gradient(135deg,#d4a0ff,#a066cc)">🥞</div>
+          <div class="mini-card-body"><div class="mini-card-title">Pannkake-chaos</div><div class="mini-card-meta">💸💸 · ⏰ 20 min</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <a href="#">Om oss</a><a href="#">Kontakt</a><a href="#">Integritetspolicy</a>
+    <span style="margin-left:12px">© 2026 I ate that</span>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 3: CREATE RECIPE                          -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="create" class="page">
+  <div class="container">
+    <div class="create-layout">
+      <h1 class="create-title">Lägg upp din matsedel 🍽️</h1>
+      <p class="create-subtitle">Inget perfekt fotostudio krävs. Bara mat och ärlighet.</p>
+
+      <form action="#feed" method="get">
+        <!-- BILD -->
+        <div class="form-section">
+          <div class="form-section-title">📷 Bild på maten</div>
+          <label class="upload-area" for="img-upload">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">Ladda upp bild eller ta foto</div>
+            <div class="upload-sub">JPG, PNG · Max 10 MB · Inga filter behövs!</div>
+          </label>
+          <input id="img-upload" type="file" accept="image/*" style="display:none">
+        </div>
+
+        <!-- GRUNDINFO -->
+        <div class="form-section">
+          <div class="form-section-title">📝 Grundläggande info</div>
+          <div class="form-group">
+            <label class="form-label" for="recipe-title">Titel på receptet *</label>
+            <input id="recipe-title" class="form-input" type="text" placeholder="T.ex. Pastaskogen, Ketchupramen 3.0..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="recipe-desc">Kort beskrivning *</label>
+            <input id="recipe-desc" class="form-input" type="text" placeholder="Berätta om rätten i en mening" required>
+          </div>
+        </div>
+
+        <!-- BUDGET + TID -->
+        <div class="form-section">
+          <div class="form-section-title">💸 Budget &amp; tid</div>
+          <div class="budget-two-col">
+            <div class="form-group">
+              <label class="form-label">Budgetnivå *</label>
+              <input type="radio" id="b1" name="budget" class="budget-radio" value="1">
+              <label for="b1" class="budget-label-ui"><span class="radio-dot"></span>💸 (1) Mycket billig</label>
+              <input type="radio" id="b2" name="budget" class="budget-radio" value="2">
+              <label for="b2" class="budget-label-ui"><span class="radio-dot"></span>💸💸 (2) Billig</label>
+              <input type="radio" id="b3" name="budget" class="budget-radio" value="3" checked>
+              <label for="b3" class="budget-label-ui"><span class="radio-dot"></span>💸💸💸 (3) Mellan</label>
+              <input type="radio" id="b4" name="budget" class="budget-radio" value="4">
+              <label for="b4" class="budget-label-ui"><span class="radio-dot"></span>💸💸💸💸 (4) Dyrare</label>
+              <input type="radio" id="b5" name="budget" class="budget-radio" value="5">
+              <label for="b5" class="budget-label-ui"><span class="radio-dot"></span>💸💸💸💸💸 (5) Lyx</label>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cook-time">Tillagningstid *</label>
+              <div style="display:flex;align-items:center;gap:10px">
+                <input id="cook-time" class="form-input" type="number" placeholder="15" style="width:80px" min="1">
+                <span style="color:var(--muted);font-size:14px">minuter</span>
+              </div>
+              <p class="italic-note">Inkludera förberedelse + koktid</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INGREDIENSER -->
+        <div class="form-section">
+          <div class="form-section-title">🛒 Ingredienser *</div>
+          <div class="form-group">
+            <label class="form-label" for="ing1">Ingrediens 1</label>
+            <input id="ing1" class="form-input" type="text" placeholder="T.ex. 200g pasta" value="Pasta">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing2">Ingrediens 2</label>
+            <input id="ing2" class="form-input" type="text" placeholder="T.ex. 3 msk ketchup" value="Ketchup">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing3">Ingrediens 3</label>
+            <input id="ing3" class="form-input" type="text" placeholder="T.ex. 1 msk smör" value="Salt">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing4">Ingrediens 4</label>
+            <input id="ing4" class="form-input" type="text" placeholder="Lägg till ingrediens...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing5">Ingrediens 5</label>
+            <input id="ing5" class="form-input" type="text" placeholder="Lägg till ingrediens...">
+          </div>
+        </div>
+
+        <!-- INSTRUKTIONER -->
+        <div class="form-section">
+          <div class="form-section-title">📋 Instruktioner *</div>
+          <div class="step-row">
+            <div class="step-badge-sm">1</div>
+            <textarea class="form-textarea" placeholder="Steg 1...">Koka pastan enligt anvisning i saltat vatten.</textarea>
+          </div>
+          <div class="step-row">
+            <div class="step-badge-sm">2</div>
+            <textarea class="form-textarea" placeholder="Steg 2...">Blanda med ketchup och smör medan pastan är varm.</textarea>
+          </div>
+          <div class="step-row">
+            <div class="step-badge-sm">3</div>
+            <textarea class="form-textarea" placeholder="Steg 3..."></textarea>
+          </div>
+          <div class="step-row">
+            <div class="step-badge-sm">4</div>
+            <textarea class="form-textarea" placeholder="Steg 4..."></textarea>
+          </div>
+        </div>
+
+        <!-- TAGGAR -->
+        <div class="form-section">
+          <div class="form-section-title">🏷️ Taggar (valfritt)</div>
+          <div class="tags-row">
+            <span class="tag-badge">pasta</span>
+            <span class="tag-badge">snabb</span>
+            <span class="tag-badge">veg</span>
+            <input class="tag-input" type="text" placeholder="Ny tagg...">
+          </div>
+          <p class="italic-note">Tryck Enter för att lägga till en tagg</p>
+        </div>
+
+        <!-- KNAPPAR -->
+        <div class="form-actions">
+          <a href="#feed" class="btn-cancel">Avbryt</a>
+          <button type="submit" class="btn-publish">🚀 Publicera recept</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer>
+    <a href="#">Om oss</a><a href="#">Kontakt</a><a href="#">Integritetspolicy</a>
+    <span style="margin-left:12px">© 2026 I ate that</span>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 4: PROFILE                                -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="profile" class="page">
+
+  <!-- Tab radio inputs must be siblings of everything that uses them -->
+  <input type="radio" id="tab-recipes"  name="profile-tab" class="tab-radios" checked>
+  <input type="radio" id="tab-saved"    name="profile-tab" class="tab-radios">
+  <input type="radio" id="tab-settings" name="profile-tab" class="tab-radios">
+
+  <div class="profile-banner"></div>
+  <div class="profile-wrap">
+
+    <!-- Profile header -->
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar">L</div>
+    </div>
+    <div class="profile-info-row">
+      <div>
+        <div class="profile-username">student_lisa</div>
+        <div class="profile-meta-text">📍 Lund · Medlem sedan januari 2026</div>
+        <div class="profile-stats">
+          <div><div class="stat-val">23</div><div class="stat-lbl">recept</div></div>
+          <div><div class="stat-val">156</div><div class="stat-lbl">likes</div></div>
+          <div><div class="stat-val">47</div><div class="stat-lbl">sparade</div></div>
+        </div>
+      </div>
+      <label for="tab-settings" class="btn-edit-profile">⚙️ Redigera profil</label>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs">
+      <label for="tab-recipes"  class="ptab-label">Mina recept (23)</label>
+      <label for="tab-saved"    class="ptab-label">Sparade (47)</label>
+      <label for="tab-settings" class="ptab-label">Inställningar</label>
+    </div>
+
+    <!-- Tab panels -->
+    <div class="tab-panels">
+
+      <!-- MINA RECEPT -->
+      <div class="tab-panel" id="panel-recipes">
+        <div class="recipes-grid">
+          <div class="profile-card">
+            <div class="profile-card-img">🍝</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Pastaskogen</div>
+              <div class="profile-card-meta">💸💸 · ❤️ 124 likes</div>
+              <div class="profile-card-actions">
+                <a href="#create" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="#profile" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+          <div class="profile-card">
+            <div class="profile-card-img">🍜</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Ketchupramen</div>
+              <div class="profile-card-meta">💸 · ❤️ 88 likes</div>
+              <div class="profile-card-actions">
+                <a href="#create" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="#profile" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+          <div class="profile-card">
+            <div class="profile-card-img" style="background:linear-gradient(135deg,#f9d976,#f39f86)">🍳</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Äggröra DX</div>
+              <div class="profile-card-meta">💸 · ❤️ 56 likes</div>
+              <div class="profile-card-actions">
+                <a href="#create" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="#profile" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+          <div class="profile-card">
+            <div class="profile-card-img" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)">🥔</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Toaströkt potatismosh</div>
+              <div class="profile-card-meta">💸💸 · ❤️ 41 likes</div>
+              <div class="profile-card-actions">
+                <a href="#create" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="#profile" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+          <div class="profile-card">
+            <div class="profile-card-img" style="background:linear-gradient(135deg,#d4a0ff,#a066cc)">🥞</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Pannkake-chaos</div>
+              <div class="profile-card-meta">💸💸 · ❤️ 33 likes</div>
+              <div class="profile-card-actions">
+                <a href="#create" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="#profile" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+          <a href="#create" class="add-new-card">
+            <div class="add-icon">+</div>
+            <div class="add-text">Nytt recept</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- SPARADE -->
+      <div class="tab-panel" id="panel-saved">
+        <div class="recipes-grid">
+          <div class="profile-card">
+            <div class="profile-card-img" style="background:linear-gradient(135deg,#a8e063,#56ab2f)">🍜</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">ramenlover_98's Ramen</div>
+              <div class="profile-card-meta">💸 · ❤️ 211 likes</div>
+              <div class="profile-card-actions">
+                <a href="#detail" class="btn-edit-sm">👁️ Visa</a>
+                <a href="#profile" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
+              </div>
+            </div>
+          </div>
+          <div class="profile-card">
+            <div class="profile-card-img" style="background:linear-gradient(135deg,#ffecd2,#fcb69f)">🥣</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Havregrynsgröt 2.0</div>
+              <div class="profile-card-meta">💸 · ❤️ 77 likes</div>
+              <div class="profile-card-actions">
+                <a href="#detail" class="btn-edit-sm">👁️ Visa</a>
+                <a href="#profile" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSTÄLLNINGAR -->
+      <div class="tab-panel" id="panel-settings">
+        <div class="settings-form">
+          <div class="form-section">
+            <div class="form-section-title">👤 Profilinformation</div>
+            <div class="form-group">
+              <label class="form-label" for="s-username">Användarnamn</label>
+              <input id="s-username" class="form-input" type="text" value="student_lisa">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-email">E-post</label>
+              <input id="s-email" class="form-input" type="email" value="lisa@student.lu.se">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-location">Plats (valfritt)</label>
+              <input id="s-location" class="form-input" type="text" value="Lund">
+            </div>
+            <button class="btn-publish" style="margin-top:4px">💾 Spara ändringar</button>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">🔒 Ändra lösenord</div>
+            <div class="form-group">
+              <label class="form-label" for="s-pw-curr">Nuvarande lösenord</label>
+              <input id="s-pw-curr" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-pw-new">Nytt lösenord</label>
+              <input id="s-pw-new" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-pw-conf">Bekräfta nytt lösenord</label>
+              <input id="s-pw-conf" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <button class="btn-publish" style="margin-top:4px">🔒 Uppdatera lösenord</button>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">🔔 Notiser</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+                <input type="checkbox" checked style="accent-color:var(--forest);width:16px;height:16px">
+                Notiser när någon gillar ditt recept
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+                <input type="checkbox" checked style="accent-color:var(--forest);width:16px;height:16px">
+                Notiser för nya kommentarer
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+                <input type="checkbox" style="accent-color:var(--forest);width:16px;height:16px">
+                Veckliga trendingdigest via mejl
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tab-panels -->
+  </div><!-- /profile-wrap -->
+  <footer style="margin-top:40px">
+    <a href="#">Om oss</a><a href="#">Kontakt</a><a href="#">Integritetspolicy</a>
+    <span style="margin-left:12px">© 2026 I ate that</span>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 5: AUTH                                   -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="auth" class="page">
+  <!-- Auth tab radios must be siblings of tab content -->
+  <input type="radio" id="atab-login"    name="auth-tab" class="auth-tab-radio" checked>
+  <input type="radio" id="atab-register" name="auth-tab" class="auth-tab-radio">
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-aside">
+        <div class="auth-aside-emoji">🍜</div>
+        <div class="auth-aside-logo">I ate that</div>
+        <div class="auth-aside-text">
+          En plats för studenters riktiga mat. Ingen perfekt belysning, inga proffsfoton — bara äkta recept som faktiskt funkar med studentbudget.
+        </div>
+      </div>
+
+      <div class="auth-form-panel">
+        <div class="auth-tabs">
+          <label for="atab-login"    class="auth-tab-label">Logga in</label>
+          <label for="atab-register" class="auth-tab-label">Registrera</label>
+        </div>
+
+        <div class="auth-form-panel-inner">
+          <!-- LOGIN -->
+          <div id="form-login" class="auth-panel">
+            <div class="form-group">
+              <label class="form-label" for="login-email">E-post</label>
+              <input id="login-email" class="form-input" type="email" placeholder="din@mejl.se">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-pw">Lösenord</label>
+              <input id="login-pw" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <a href="#feed" class="btn-auth">Logga in →</a>
+            <div class="auth-link"><a href="#">Glömt lösenord?</a></div>
+          </div>
+
+          <!-- REGISTER -->
+          <div id="form-register" class="auth-panel">
+            <div class="form-group">
+              <label class="form-label" for="reg-user">Användarnamn</label>
+              <input id="reg-user" class="form-input" type="text" placeholder="student_lisa">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">E-post</label>
+              <input id="reg-email" class="form-input" type="email" placeholder="din@mejl.se">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-pw">Lösenord</label>
+              <input id="reg-pw" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-pw2">Bekräfta lösenord</label>
+              <input id="reg-pw2" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <a href="#feed" class="btn-auth">Skapa konto →</a>
+            <div class="auth-terms">
+              Genom att registrera dig godkänner du våra <a href="#">villkor</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
