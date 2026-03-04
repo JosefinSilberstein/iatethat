@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I ate that – Min profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="nav-inner">
+      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <div class="nav-search">
+        <span>🔍</span>
+        <input type="text" placeholder="Sök recept...">
+      </div>
+      <div class="nav-links">
+        <a href="feed.html"    class="nav-link">Feed</a>
+        <a href="create.html"  class="nav-link">+ Lägg upp</a>
+        <a href="profile.html" class="nav-link active">Min profil</a>
+        <a href="profile.html" class="nav-avatar">L</a>
+        <a href="auth.html"    class="btn-login">Logga ut</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Tab-radioknappar måste vara syskon till allt som styrs av dem -->
+  <input type="radio" id="tab-recipes"  name="profile-tab" class="tab-radios" checked>
+  <input type="radio" id="tab-saved"    name="profile-tab" class="tab-radios">
+  <input type="radio" id="tab-settings" name="profile-tab" class="tab-radios">
+
+  <!-- PROFILBANNER -->
+  <div class="profile-banner"></div>
+
+  <div class="profile-wrap">
+
+    <!-- PROFILHUVUD -->
+    <div class="profile-avatar">L</div>
+    <div class="profile-info-row">
+      <div>
+        <div class="profile-username">student_lisa</div>
+        <div class="profile-meta-text">📍 Lund · Medlem sedan januari 2026</div>
+        <div class="profile-stats">
+          <div>
+            <div class="stat-val">23</div>
+            <div class="stat-lbl">recept</div>
+          </div>
+          <div>
+            <div class="stat-val">156</div>
+            <div class="stat-lbl">likes</div>
+          </div>
+          <div>
+            <div class="stat-val">47</div>
+            <div class="stat-lbl">sparade</div>
+          </div>
+        </div>
+      </div>
+      <label for="tab-settings" class="btn-edit-profile">⚙️ Redigera profil</label>
+    </div>
+
+    <!-- FLIKAR -->
+    <div class="profile-tabs">
+      <label for="tab-recipes"  class="ptab-label">Mina recept (23)</label>
+      <label for="tab-saved"    class="ptab-label">Sparade (47)</label>
+      <label for="tab-settings" class="ptab-label">Inställningar</label>
+    </div>
+
+    <!-- FLIKINNEHÅLL -->
+    <div class="tab-panels">
+
+      <!-- MINA RECEPT -->
+      <div class="tab-panel" id="panel-recipes">
+        <div class="recipes-grid">
+
+          <div class="profile-card">
+            <div class="profile-card-img">🍝</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Pastaskogen</div>
+              <div class="profile-card-meta">💸💸 · ❤️ 124 likes</div>
+              <div class="profile-card-actions">
+                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-img">🍜</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Ketchupramen</div>
+              <div class="profile-card-meta">💸 · ❤️ 88 likes</div>
+              <div class="profile-card-actions">
+                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-img" style="background: linear-gradient(135deg, #f9d976, #f39f86)">🍳</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Äggröra DX</div>
+              <div class="profile-card-meta">💸 · ❤️ 56 likes</div>
+              <div class="profile-card-actions">
+                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-img" style="background: linear-gradient(135deg, #b2dfdb, #80cbc4)">🥔</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Toaströkt potatismosh</div>
+              <div class="profile-card-meta">💸💸 · ❤️ 41 likes</div>
+              <div class="profile-card-actions">
+                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-img" style="background: linear-gradient(135deg, #d4a0ff, #a066cc)">🥞</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Pannkake-chaos</div>
+              <div class="profile-card-meta">💸💸 · ❤️ 33 likes</div>
+              <div class="profile-card-actions">
+                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="create.html" class="add-new-card">
+            <div class="add-icon">+</div>
+            <div class="add-text">Nytt recept</div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- SPARADE RECEPT -->
+      <div class="tab-panel" id="panel-saved">
+        <div class="recipes-grid">
+
+          <div class="profile-card">
+            <div class="profile-card-img" style="background: linear-gradient(135deg, #a8e063, #56ab2f)">🍜</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">ramenlover_98's Ramen</div>
+              <div class="profile-card-meta">💸 · ❤️ 211 likes</div>
+              <div class="profile-card-actions">
+                <a href="detail.html" class="btn-edit-sm">👁️ Visa</a>
+                <a href="profile.html" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-img" style="background: linear-gradient(135deg, #ffecd2, #fcb69f)">🥣</div>
+            <div class="profile-card-body">
+              <div class="profile-card-title">Havregrynsgröt 2.0</div>
+              <div class="profile-card-meta">💸 · ❤️ 77 likes</div>
+              <div class="profile-card-actions">
+                <a href="detail.html" class="btn-edit-sm">👁️ Visa</a>
+                <a href="profile.html" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- INSTÄLLNINGAR -->
+      <div class="tab-panel" id="panel-settings">
+        <div class="settings-form">
+
+          <div class="form-section">
+            <div class="form-section-title">👤 Profilinformation</div>
+            <div class="form-group">
+              <label class="form-label" for="s-username">Användarnamn</label>
+              <input id="s-username" class="form-input" type="text" value="student_lisa">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-email">E-post</label>
+              <input id="s-email" class="form-input" type="email" value="lisa@student.lu.se">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-location">Plats (valfritt)</label>
+              <input id="s-location" class="form-input" type="text" value="Lund">
+            </div>
+            <button class="btn-publish" style="margin-top: 4px">💾 Spara ändringar</button>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">🔒 Ändra lösenord</div>
+            <div class="form-group">
+              <label class="form-label" for="s-pw-curr">Nuvarande lösenord</label>
+              <input id="s-pw-curr" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-pw-new">Nytt lösenord</label>
+              <input id="s-pw-new" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s-pw-conf">Bekräfta nytt lösenord</label>
+              <input id="s-pw-conf" class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <button class="btn-publish" style="margin-top: 4px">🔒 Uppdatera lösenord</button>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">🔔 Notiser</div>
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer">
+                <input type="checkbox" checked style="accent-color: var(--forest); width: 16px; height: 16px">
+                Notiser när någon gillar ditt recept
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer">
+                <input type="checkbox" checked style="accent-color: var(--forest); width: 16px; height: 16px">
+                Notiser för nya kommentarer
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer">
+                <input type="checkbox" style="accent-color: var(--forest); width: 16px; height: 16px">
+                Veckliga trendingdigest via mejl
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /tab-panels -->
+  </div><!-- /profile-wrap -->
+
+  <footer style="margin-top: 40px">
+    <a href="#">Om oss</a>
+    <a href="#">Kontakt</a>
+    <a href="#">Integritetspolicy</a>
+    <span style="margin-left: 12px">© 2026 I ate that</span>
+  </footer>
+
+</body>
+</html>
