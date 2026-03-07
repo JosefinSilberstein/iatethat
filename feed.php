@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I ate that – Feed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="nav-inner">
+      <a href="feed.php" class="brand">🍜 I ate that</a>
+      <div class="nav-search">
+        <span>🔍</span>
+        <input type="text" placeholder="Sök recept...">
+      </div>
+      <div class="nav-links">
+        <a href="feed.php"    class="nav-link active">Feed</a>
+        <a href="create.php"  class="nav-link">+ Lägg upp</a>
+        <a href="profile.php" class="nav-link">Min profil</a>
+        <a href="profile.php" class="nav-avatar">L</a>
+        <a href="auth.php"    class="btn-login">Logga ut</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <div class="feed-layout">
+
+      <main>
+        <!-- HERO -->
+        <div class="feed-hero">
+          <h1>Vad åt du idag? 🍝</h1>
+          <p>Dela studentköksmagi. Inga domar, bara mat.</p>
+          <a href="create.php" class="btn-cta">+ Lägg upp din matsedel</a>
+        </div>
+
+        <!-- KORT 1 -->
+        <a href="detail.php" class="recipe-card">
+          <div class="card-img">
+            🍝
+            <span class="card-img-badge">⏰ 15 min</span>
+          </div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar">L</div>
+              <span class="author-name">student_lisa</span>
+              <span class="author-time">2 timmar sedan</span>
+            </div>
+            <div class="card-title">Pastaskogen</div>
+            <div class="card-desc">Snabb pasta med det man har hemma — ketchup ingår</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸💸 Billig</span>
+              <span class="meta-pill">🌿 pasta</span>
+              <span class="meta-pill">⚡ snabb</span>
+              <span class="meta-pill">🥦 veg</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill liked">❤️ 124</span>
+              <span class="react-pill">💬 23</span>
+              <span class="react-pill">📌 47</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- KORT 2 -->
+        <a href="detail.php" class="recipe-card">
+          <div class="card-img" style="background: linear-gradient(135deg, #f9d976, #f39f86)">
+            🍳
+            <span class="card-img-badge">⏰ 10 min</span>
+          </div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar" style="background: var(--cream)">N</div>
+              <span class="author-name">noobkocken</span>
+              <span class="author-time">5 timmar sedan</span>
+            </div>
+            <div class="card-title">Äggtillrättamakaroner</div>
+            <div class="card-desc">Klass-budget, max smak. Funkar faktiskt.</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸 Mycket billig</span>
+              <span class="meta-pill">🥚 ägg</span>
+              <span class="meta-pill">⚡ budget</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill">❤️ 88</span>
+              <span class="react-pill">💬 9</span>
+              <span class="react-pill">📌 31</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- KORT 3 -->
+        <a href="detail.php" class="recipe-card">
+          <div class="card-img" style="background: linear-gradient(135deg, #a8e063, #56ab2f)">
+            🍜
+            <span class="card-img-badge">⏰ 5 min</span>
+          </div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar" style="background: var(--sage)">R</div>
+              <span class="author-name">ramenlover_98</span>
+              <span class="author-time">igår</span>
+            </div>
+            <div class="card-title">Ketchupramen</div>
+            <div class="card-desc">Lägsta möjliga insats, faktiskt äckligt gott</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸 Mycket billig</span>
+              <span class="meta-pill">🍜 ramen</span>
+              <span class="meta-pill">⚡ snabb</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill">❤️ 211</span>
+              <span class="react-pill">💬 44</span>
+              <span class="react-pill">📌 89</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
+        </a>
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-title">🔎 Filtrera</div>
+          <div class="filter-group">
+            <span class="filter-label">Budgetnivå</span>
+            <div class="filter-chips">
+              <input type="checkbox" id="f1" class="chip-check" checked>
+              <label for="f1" class="chip">💸 Billigast</label>
+              <input type="checkbox" id="f2" class="chip-check" checked>
+              <label for="f2" class="chip">💸💸 Billig</label>
+              <input type="checkbox" id="f3" class="chip-check">
+              <label for="f3" class="chip">💸💸💸 Medel</label>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Tid</span>
+            <div class="filter-chips">
+              <input type="checkbox" id="f4" class="chip-check" checked>
+              <label for="f4" class="chip">Under 15 min</label>
+              <input type="checkbox" id="f5" class="chip-check">
+              <label for="f5" class="chip">15–30 min</label>
+              <input type="checkbox" id="f6" class="chip-check">
+              <label for="f6" class="chip">30+ min</label>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Kategori</span>
+            <div class="filter-chips">
+              <input type="checkbox" id="f7" class="chip-check">
+              <label for="f7" class="chip">🍝 pasta</label>
+              <input type="checkbox" id="f8" class="chip-check">
+              <label for="f8" class="chip">🍜 nudlar</label>
+              <input type="checkbox" id="f9" class="chip-check">
+              <label for="f9" class="chip">🥦 veg</label>
+              <input type="checkbox" id="f10" class="chip-check">
+              <label for="f10" class="chip">🥚 ägg</label>
+              <input type="checkbox" id="f11" class="chip-check">
+              <label for="f11" class="chip">🍲 soppa</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-title">🔥 Trending</div>
+          <div class="trending-item">
+            <div class="trending-num">1</div>
+            <div>
+              <div class="trending-text">Ketchupramen</div>
+              <div class="trending-meta">ramenlover_98 · ❤️ 211</div>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">2</div>
+            <div>
+              <div class="trending-text">Pastaskogen</div>
+              <div class="trending-meta">student_lisa · ❤️ 124</div>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">3</div>
+            <div>
+              <div class="trending-text">Äggtillrättamakaroner</div>
+              <div class="trending-meta">noobkocken · ❤️ 88</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-title">🏷️ Populära taggar</div>
+          <div class="filter-chips">
+            <span class="chip">pasta</span>
+            <span class="chip">ramen</span>
+            <span class="chip">snabb</span>
+            <span class="chip">veg</span>
+            <span class="chip">budget</span>
+            <span class="chip">ägg</span>
+            <span class="chip">soppa</span>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <footer>
+    <a href="#">Om oss</a>
+    <a href="#">Kontakt</a>
+    <a href="#">Integritetspolicy</a>
+    <span style="margin-left: 12px">© 2026 I ate that</span>
+  </footer>
+
+</body>
+</html>

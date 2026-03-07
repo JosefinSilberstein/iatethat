@@ -34,7 +34,7 @@
       <h1 class="create-title">Lägg upp din matsedel 🍽️</h1>
       <p class="create-subtitle">Inget perfekt fotostudio krävs. Bara mat och ärlighet.</p>
 
-      <form action="feed.html" method="get">
+      <form action="assets/functions/insert.php" method="post">
 
         <!-- BILD -->
         <div class="form-section">
@@ -52,11 +52,11 @@
           <div class="form-section-title">📝 Grundläggande info</div>
           <div class="form-group">
             <label class="form-label" for="recipe-title">Titel på receptet *</label>
-            <input id="recipe-title" class="form-input" type="text" placeholder="T.ex. Pastaskogen, Ketchupramen 3.0..." required>
+            <input id="recipe-title" name="recipe_title" class="form-input" type="text" placeholder="T.ex. Pastaskogen, Ketchupramen 3.0..." required>
           </div>
           <div class="form-group">
             <label class="form-label" for="recipe-desc">Kort beskrivning *</label>
-            <input id="recipe-desc" class="form-input" type="text" placeholder="Berätta om rätten i en mening" required>
+            <input id="recipe-desc" name="recipe_desc" class="form-input" type="text" placeholder="Berätta om rätten i en mening" required>
           </div>
         </div>
 
@@ -80,7 +80,7 @@
             <div class="form-group">
               <label class="form-label" for="cook-time">Tillagningstid *</label>
               <div style="display: flex; align-items: center; gap: 10px">
-                <input id="cook-time" class="form-input" type="number" placeholder="15" style="width: 80px" min="1">
+                <input id="cook-time" name="cook_time" class="form-input" type="number" placeholder="15" style="width: 80px" min="1">
                 <span style="color: var(--muted); font-size: 14px">minuter</span>
               </div>
               <p class="italic-note">Inkludera förberedelse + koktid</p>
@@ -93,23 +93,23 @@
           <div class="form-section-title">🛒 Ingredienser *</div>
           <div class="form-group">
             <label class="form-label" for="ing1">Ingrediens 1</label>
-            <input id="ing1" class="form-input" type="text" placeholder="T.ex. 200g pasta">
+            <input id="ing1" name="ing1" class="form-input" type="text" placeholder="T.ex. 200g pasta">
           </div>
           <div class="form-group">
             <label class="form-label" for="ing2">Ingrediens 2</label>
-            <input id="ing2" class="form-input" type="text" placeholder="T.ex. 3 msk ketchup">
+            <input id="ing2" name="ing2" class="form-input" type="text" placeholder="T.ex. 3 msk ketchup">
           </div>
           <div class="form-group">
             <label class="form-label" for="ing3">Ingrediens 3</label>
-            <input id="ing3" class="form-input" type="text" placeholder="T.ex. 1 msk smör">
+            <input id="ing3" name="ing3" class="form-input" type="text" placeholder="T.ex. 1 msk smör">
           </div>
           <div class="form-group">
             <label class="form-label" for="ing4">Ingrediens 4</label>
-            <input id="ing4" class="form-input" type="text" placeholder="Lägg till ingrediens...">
+            <input id="ing4" name="ing4" class="form-input" type="text" placeholder="Lägg till ingrediens...">
           </div>
           <div class="form-group">
             <label class="form-label" for="ing5">Ingrediens 5</label>
-            <input id="ing5" class="form-input" type="text" placeholder="Lägg till ingrediens...">
+            <input id="ing5" name="ing5" class="form-input" type="text" placeholder="Lägg till ingrediens...">
           </div>
         </div>
 
@@ -141,7 +141,7 @@
             <span class="tag-badge">pasta</span>
             <span class="tag-badge">snabb</span>
             <span class="tag-badge">veg</span>
-            <input class="tag-input" type="text" placeholder="Ny tagg...">
+            <input class="tag-input" name type="text" placeholder="Ny tagg...">
           </div>
           <p class="italic-note">Tryck Enter för att lägga till en tagg</p>
         </div>
