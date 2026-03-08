@@ -33,26 +33,33 @@ if ($stmt->rowCount() > 0) {
     //skriver ut alla poster
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo '
-      <tr>
-            <td>' . $row['title'] . '</td>
-            <td>' . $row['description'] . '</td>
-            <td>' . $row['cook_time'] . '</td>
-            <td>' . $row['ing1'] . '</td>
-            <td>' . $row['ing2'] . '</td>
-            <td>' . $row['ing3'] . '</td>
-            <td>' . $row['ing4'] . '</td>
-            <td>' . $row['ing5'] . '</td>
-        <td>
-        <a href="edit.php?id=' . $row['id'] . '">
-        <i class="glyphicon glyphicon-pencil"></i>
+  <a href="detail.php" class="recipe-card">
+          <div class="card-img">
+            🍝
+            <span class="card-img-badge">⏰ ' . $row['cook_time'] . ' min</span>
+          </div>
+          <div class="card-body">
+            <div class="card-author">
+              <div class="author-avatar">L</div>
+              <span class="author-name">student_lisa</span>
+              <span class="author-time">2 timmar sedan</span>
+            </div>
+            <div class="card-title">' . $row['title'] . '</div>
+            <div class="card-desc">' . $row['description'] . '</div>
+            <div class="card-meta">
+              <span class="meta-pill">💸💸 Billig</span>
+              <span class="meta-pill">🌿 pasta</span>
+              <span class="meta-pill">⚡ snabb</span>
+              <span class="meta-pill">🥦 veg</span>
+            </div>
+            <div class="card-footer">
+              <span class="react-pill liked">❤️ 124</span>
+              <span class="react-pill">💬 23</span>
+              <span class="react-pill">📌 47</span>
+              <span class="btn-recipe">Se recept →</span>
+            </div>
+          </div>
         </a>
-        </td>
-        <td>
-       <a href="remove.php?id=' . $row['id'] . '">
-        <i class="glyphicon glyphicon-remove"></i>
-        </a>
-        </td>
-        </tr>
         ';
       
 
