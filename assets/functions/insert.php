@@ -5,14 +5,14 @@
  */
 
 //placeholder - ska bytas ut mot riktig databasuppkoppling ERIK
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 
 // PERSON C behöver vweta att jag skickar i JSON-format
 header('Content-Type: application/json');
 
 //Validera inmatad information
- if(isset($POST))
+ if(isset($_POST))
 
     
 
