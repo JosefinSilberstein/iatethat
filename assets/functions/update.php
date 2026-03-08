@@ -6,16 +6,16 @@ if (isset($_POST['update'])) {
 
     //skapar förfrågan för att uppdatera specifik post i databasen
     $sql = "
-    UPDATE recipes
-     SET title = :title, 
-     description = :description,
-     cook_time = :cook_time,
-     ing1 = :ing1,
-     ing2 = :ing2,
-      ing3 = :ing3,
-       ing4 = :ing4,
-        ing5 = :ing5
-     WHERE id = :id";
+UPDATE recipes
+    SET title = :title, 
+    description = :description,
+    cook_time = :cook_time,
+    ing1 = :ing1,
+    ing2 = :ing2,
+    ing3 = :ing3,
+    ing4 = :ing4,
+    ing5 = :ing5
+    WHERE id = :id";
 
 //förbereder frågan till databasen
 $stmt = $dbh->prepare($sql);
