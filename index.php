@@ -1,33 +1,14 @@
 <?php
-
-
 // BOKENS INSTRUKTIONER
-
-
-//upprättar koppling till databasen
-require_once 'assets/config/db.php';
-
-
-//Hämtar poster från databasen
-$sql = "SELECT * FROM recipes";
-$stmt = $dbh->prepare($sql);
-$stmt->execute();
+// hämtar poster från databasen via select-funktionen
+require_once 'assets/functions/select.php';
 ?>
 
 <!--mellan kommande kommentarer ska DOCTYPE och html-kod in (se sida 176 i boken)
 här under fortsätter html (se sida 176 i boken) -->
 
-
-
-
-
-
-
-
-
-
 <!--slut html-->
-<?php 
+<?php
 //kontrollerar om det finns poster
 if ($stmt->rowCount() > 0) {
     //skriver ut alla poster
@@ -61,22 +42,15 @@ if ($stmt->rowCount() > 0) {
           </div>
         </a>
         ';
-      
-
-
-
     }
 } else {
-    echo '<tr><td colspan="10">Inga poster hittades</td>
-    </tr>
-    ';
+    echo 'Inga poster hittades';
 }
 
 //kontrollerar om en variabel exsisterar
 if (isset($_GET['delete'])) {
     echo '<div class="alert alert-danger">Receptet har raderats</div>';
 }
-
 ?>
 
 <!-- här under fortsätter html (se sida 176 i boken) -->
