@@ -12,17 +12,17 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-inner">
-      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-search">
         <span>🔍</span>
         <input type="text" placeholder="Sök recept...">
       </div>
       <div class="nav-links">
-        <a href="feed.html"    class="nav-link">Feed</a>
-        <a href="create.html"  class="nav-link active">+ Lägg upp</a>
-        <a href="profile.html" class="nav-link">Min profil</a>
-        <a href="profile.html" class="nav-avatar">L</a>
-        <a href="auth.html"    class="btn-login">Logga ut</a>
+        <a href="feed.php"    class="nav-link">Feed</a>
+        <a href="create.php"  class="nav-link active">+ Lägg upp</a>
+        <a href="profile.php" class="nav-link">Min profil</a>
+        <a href="profile.php" class="nav-avatar">L</a>
+        <a href="auth.php"    class="btn-login">Logga ut</a>
       </div>
     </div>
   </nav>
@@ -34,7 +34,7 @@
       <h1 class="create-title">Lägg upp din matsedel 🍽️</h1>
       <p class="create-subtitle">Inget perfekt fotostudio krävs. Bara mat och ärlighet.</p>
 
-      <form action="assets/functions/insert.php" method="post">
+      <form action="add.php" method="post">
 
         <!-- BILD -->
         <div class="form-section">
@@ -141,15 +141,15 @@
             <span class="tag-badge">pasta</span>
             <span class="tag-badge">snabb</span>
             <span class="tag-badge">veg</span>
-            <input class="tag-input" name type="text" placeholder="Ny tagg...">
+            <input class="tag-input" type="text" placeholder="Ny tagg...">
           </div>
           <p class="italic-note">Tryck Enter för att lägga till en tagg</p>
         </div>
 
         <!-- ÅTGÄRDSKNAPPAR -->
         <div class="form-actions">
-          <a href="feed.html" class="btn-cancel">Avbryt</a>
-          <button type="submit" class="btn-publish">🚀 Publicera recept</button>
+          <a href="feed.php" class="btn-cancel">Avbryt</a>
+          <button type="submit" name="submit" class="btn-publish">🚀 Publicera recept</button>
         </div>
 
       </form>

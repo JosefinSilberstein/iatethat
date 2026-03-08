@@ -12,9 +12,9 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-inner">
-      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-links">
-        <a href="auth.html" class="btn-login">Logga in</a>
+        <a href="auth.php" class="btn-login">Logga in</a>
       </div>
     </div>
   </nav>
@@ -56,7 +56,7 @@
               <label class="form-label" for="login-pw">Lösenord</label>
               <input id="login-pw" class="form-input" type="password" placeholder="••••••••">
             </div>
-            <a href="feed.html" class="btn-auth">Logga in →</a>
+            <a href="feed.php" class="btn-auth">Logga in →</a>
             <div class="auth-link">
               <a href="#">Glömt lösenord?</a>
             </div>
@@ -80,7 +80,7 @@
               <label class="form-label" for="reg-pw2">Bekräfta lösenord</label>
               <input id="reg-pw2" class="form-input" type="password" placeholder="••••••••">
             </div>
-            <a href="feed.html" class="btn-auth">Skapa konto →</a>
+            <a href="feed.php" class="btn-auth">Skapa konto →</a>
             <div class="auth-terms">
               Genom att registrera dig godkänner du våra <a href="#">villkor</a>
             </div>

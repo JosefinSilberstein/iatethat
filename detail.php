@@ -12,17 +12,17 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-inner">
-      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-search">
         <span>🔍</span>
         <input type="text" placeholder="Sök recept...">
       </div>
       <div class="nav-links">
-        <a href="feed.html"    class="nav-link">Feed</a>
-        <a href="create.html"  class="nav-link">+ Lägg upp</a>
-        <a href="profile.html" class="nav-link">Min profil</a>
-        <a href="profile.html" class="nav-avatar">L</a>
-        <a href="auth.html"    class="btn-login">Logga ut</a>
+        <a href="feed.php"    class="nav-link">Feed</a>
+        <a href="create.php"  class="nav-link">+ Lägg upp</a>
+        <a href="profile.php" class="nav-link">Min profil</a>
+        <a href="profile.php" class="nav-avatar">L</a>
+        <a href="auth.php"    class="btn-login">Logga ut</a>
       </div>
     </div>
   </nav>
@@ -31,7 +31,7 @@
   <div class="container">
     <div class="detail-layout">
 
-      <a href="feed.html" class="back-link">← Tillbaka till feed</a>
+      <a href="feed.php" class="back-link">← Tillbaka till feed</a>
 
       <!-- HERO BILD -->
       <div class="detail-hero-img">🍝</div>
@@ -103,8 +103,9 @@
         <label for="save-toggle" class="int-btn">📌 Spara recept</label>
 
         <a href="#kommentarer" class="int-btn">💬 23 Kommentarer</a>
-        <a href="create.html" class="int-btn" style="margin-left: auto">✏️ Redigera</a>
-        <a href="feed.html" class="int-btn-danger">🗑️ Radera</a>
+        <a href="edit.php?id=1" class="int-btn" style="margin-left: auto">✏️ Redigera</a>
+       <a href="remove.php?id=1" class="int-btn-danger">🗑️ Radera</a>
+
       </div>
 
       <!-- KOMMENTARER -->
@@ -146,21 +147,21 @@
       <hr class="divider">
       <div class="section-heading">Fler recept från student_lisa</div>
       <div class="related-grid">
-        <a href="detail.html" class="mini-recipe-card">
+        <a href="detail.php" class="mini-recipe-card">
           <div class="mini-card-img">🍜</div>
           <div class="mini-card-body">
             <div class="mini-card-title">Ketchupramen</div>
             <div class="mini-card-meta">💸 · ⏰ 5 min</div>
           </div>
         </a>
-        <a href="detail.html" class="mini-recipe-card">
+        <a href="detail.php" class="mini-recipe-card">
           <div class="mini-card-img" style="background: linear-gradient(135deg, #f9d976, #f39f86)">🍳</div>
           <div class="mini-card-body">
             <div class="mini-card-title">Äggröra DX</div>
             <div class="mini-card-meta">💸 · ⏰ 8 min</div>
           </div>
         </a>
-        <a href="detail.html" class="mini-recipe-card">
+        <a href="detail.php" class="mini-recipe-card">
           <div class="mini-card-img" style="background: linear-gradient(135deg, #d4a0ff, #a066cc)">🥞</div>
           <div class="mini-card-body">
             <div class="mini-card-title">Pannkake-chaos</div>
