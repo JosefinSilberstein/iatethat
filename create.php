@@ -12,17 +12,17 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-inner">
-      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-search">
         <span>🔍</span>
         <input type="text" placeholder="Sök recept...">
       </div>
       <div class="nav-links">
-        <a href="feed.html"    class="nav-link">Feed</a>
-        <a href="create.html"  class="nav-link active">+ Lägg upp</a>
-        <a href="profile.html" class="nav-link">Min profil</a>
-        <a href="profile.html" class="nav-avatar">L</a>
-        <a href="auth.html"    class="btn-login">Logga ut</a>
+        <a href="feed.php"    class="nav-link">Feed</a>
+        <a href="create.php"  class="nav-link active">+ Lägg upp</a>
+        <a href="profile.php" class="nav-link">Min profil</a>
+        <a href="profile.php" class="nav-avatar">L</a>
+        <a href="auth.php"    class="btn-login">Logga ut</a>
       </div>
     </div>
   </nav>
@@ -34,7 +34,7 @@
       <h1 class="create-title">Lägg upp din matsedel 🍽️</h1>
       <p class="create-subtitle">Inget perfekt fotostudio krävs. Bara mat och ärlighet.</p>
 
-      <form action="feed.html" method="get">
+      <form action="add.php" method="post">
 
         <!-- BILD -->
         <div class="form-section">
@@ -45,7 +45,6 @@
             <div class="upload-sub">JPG, PNG · Max 10 MB · Inga filter behövs!</div>
           </label>
           <input id="img-upload" type="file" accept="image/*" style="display: none">
-          <div id="image-preview-container"></div>
         </div>
 
         <!-- GRUNDINFO -->
@@ -53,12 +52,11 @@
           <div class="form-section-title">📝 Grundläggande info</div>
           <div class="form-group">
             <label class="form-label" for="recipe-title">Titel på receptet *</label>
-            <input id="recipe-title" class="form-input" type="text" placeholder="T.ex. Pastaskogen, Ketchupramen 3.0...">
+            <input id="recipe-title" name="recipe_title" class="form-input" type="text" placeholder="T.ex. Pastaskogen, Ketchupramen 3.0..." required>
           </div>
           <div class="form-group">
             <label class="form-label" for="recipe-desc">Kort beskrivning *</label>
-            <input id="recipe-desc" class="form-input" type="text" placeholder="Berätta om rätten i en mening">
-            <p id="desc-counter" style="font-size: 12px; color: var(--muted); margin: 4px 0 0 0;">0/100 tecken</p>
+            <input id="recipe-desc" name="recipe_desc" class="form-input" type="text" placeholder="Berätta om rätten i en mening" required>
           </div>
         </div>
 
@@ -82,7 +80,7 @@
             <div class="form-group">
               <label class="form-label" for="cook-time">Tillagningstid *</label>
               <div style="display: flex; align-items: center; gap: 10px">
-                <input id="cook-time" class="form-input" type="number" placeholder="15" style="width: 80px" min="1">
+                <input id="cook-time" name="cook_time" class="form-input" type="number" placeholder="15" style="width: 80px" min="1">
                 <span style="color: var(--muted); font-size: 14px">minuter</span>
               </div>
               <p class="italic-note">Inkludera förberedelse + koktid</p>
@@ -93,37 +91,27 @@
         <!-- INGREDIENSER -->
         <div class="form-section">
           <div class="form-section-title">🛒 Ingredienser *</div>
-
-          <div id="ingredients-list">
-            <div class="form-group">
-              <label class="form-label" for="ing1">Ingrediens 1</label>
-              <input id="ing1" class="form-input" type="text" placeholder="T.ex. 200g pasta">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="ing2">Ingrediens 2</label>
-              <input id="ing2" class="form-input" type="text" placeholder="T.ex. 3 msk ketchup">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="ing3">Ingrediens 3</label>
-              <input id="ing3" class="form-input" type="text" placeholder="T.ex. 1 msk smör">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="ing4">Ingrediens 4</label>
-              <input id="ing4" class="form-input" type="text" placeholder="Lägg till ingrediens...">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="ing5">Ingrediens 5</label>
-              <input id="ing5" class="form-input" type="text" placeholder="Lägg till ingrediens...">
-            </div>
+          <div class="form-group">
+            <label class="form-label" for="ing1">Ingrediens 1</label>
+            <input id="ing1" name="ing1" class="form-input" type="text" placeholder="T.ex. 200g pasta">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing2">Ingrediens 2</label>
+            <input id="ing2" name="ing2" class="form-input" type="text" placeholder="T.ex. 3 msk ketchup">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing3">Ingrediens 3</label>
+            <input id="ing3" name="ing3" class="form-input" type="text" placeholder="T.ex. 1 msk smör">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing4">Ingrediens 4</label>
+            <input id="ing4" name="ing4" class="form-input" type="text" placeholder="Lägg till ingrediens...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ing5">Ingrediens 5</label>
+            <input id="ing5" name="ing5" class="form-input" type="text" placeholder="Lägg till ingrediens...">
           </div>
         </div>
-
-        <button type="button" id="add-ingredient-btn" class="btn-cancel">
-          + Lägg till ingrediens
-        </button>
-
-        <br>
-        <br>
 
         <!-- INSTRUKTIONER -->
         <div class="form-section">
@@ -158,16 +146,10 @@
           <p class="italic-note">Tryck Enter för att lägga till en tagg</p>
         </div>
 
-        <!-- FELMEDDELANDEN -->
-        <div id="error-box" style="display: none; background: #fee2e2; border: 1px solid #f87171; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; color: #b91c1c;">
-          <strong>Vänligen åtgärda följande fel:</strong>
-          <ul id="error-list" style="margin: 8px 0 0 0; padding-left: 20px;"></ul>
-        </div>
-
         <!-- ÅTGÄRDSKNAPPAR -->
         <div class="form-actions">
-          <a href="feed.html" class="btn-cancel">Avbryt</a>
-          <button type="submit" class="btn-publish">🚀 Publicera recept</button>
+          <a href="feed.php" class="btn-cancel">Avbryt</a>
+          <button type="submit" name="submit" class="btn-publish">🚀 Publicera recept</button>
         </div>
 
       </form>
@@ -181,6 +163,5 @@
     <span style="margin-left: 12px">© 2026 I ate that</span>
   </footer>
 
-  <script src="script.js"></script>
 </body>
 </html>

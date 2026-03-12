@@ -12,17 +12,17 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-inner">
-      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-search">
         <span>🔍</span>
         <input type="text" placeholder="Sök recept...">
       </div>
       <div class="nav-links">
-        <a href="feed.html"    class="nav-link">Feed</a>
-        <a href="create.html"  class="nav-link">+ Lägg upp</a>
-        <a href="profile.html" class="nav-link active">Min profil</a>
-        <a href="profile.html" class="nav-avatar">L</a>
-        <a href="auth.html"    class="btn-login">Logga ut</a>
+        <a href="feed.php"    class="nav-link">Feed</a>
+        <a href="create.php"  class="nav-link">+ Lägg upp</a>
+        <a href="profile.php" class="nav-link active">Min profil</a>
+        <a href="profile.php" class="nav-avatar">L</a>
+        <a href="auth.php"    class="btn-login">Logga ut</a>
       </div>
     </div>
   </nav>
@@ -81,8 +81,8 @@
               <div class="profile-card-title">Pastaskogen</div>
               <div class="profile-card-meta">💸💸 · ❤️ 124 likes</div>
               <div class="profile-card-actions">
-                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
-                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+                <a href="edit.php?id=1" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="remove.php?id=1" class="btn-delete-sm">🗑️</a>
               </div>
             </div>
           </div>
@@ -93,8 +93,8 @@
               <div class="profile-card-title">Ketchupramen</div>
               <div class="profile-card-meta">💸 · ❤️ 88 likes</div>
               <div class="profile-card-actions">
-                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
-                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+                <a href="edit.php?id=2" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="remove.php?id=2" class="btn-delete-sm">🗑️</a>
               </div>
             </div>
           </div>
@@ -105,8 +105,8 @@
               <div class="profile-card-title">Äggröra DX</div>
               <div class="profile-card-meta">💸 · ❤️ 56 likes</div>
               <div class="profile-card-actions">
-                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
-                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+                <a href="edit.php?id=3" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="remove.php?id=3" class="btn-delete-sm">🗑️</a>
               </div>
             </div>
           </div>
@@ -117,8 +117,8 @@
               <div class="profile-card-title">Toaströkt potatismosh</div>
               <div class="profile-card-meta">💸💸 · ❤️ 41 likes</div>
               <div class="profile-card-actions">
-                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
-                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+                <a href="edit.php?id=4" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="remove.php?id=4" class="btn-delete-sm">🗑️</a>
               </div>
             </div>
           </div>
@@ -129,13 +129,13 @@
               <div class="profile-card-title">Pannkake-chaos</div>
               <div class="profile-card-meta">💸💸 · ❤️ 33 likes</div>
               <div class="profile-card-actions">
-                <a href="create.html" class="btn-edit-sm">✏️ Redigera</a>
-                <a href="profile.html" class="btn-delete-sm">🗑️</a>
+                <a href="edit.php?id=5" class="btn-edit-sm">✏️ Redigera</a>
+                <a href="remove.php?id=5" class="btn-delete-sm">🗑️</a>
               </div>
             </div>
           </div>
 
-          <a href="create.html" class="add-new-card">
+          <a href="create.php" class="add-new-card">
             <div class="add-icon">+</div>
             <div class="add-text">Nytt recept</div>
           </a>
@@ -153,8 +153,8 @@
               <div class="profile-card-title">ramenlover_98's Ramen</div>
               <div class="profile-card-meta">💸 · ❤️ 211 likes</div>
               <div class="profile-card-actions">
-                <a href="detail.html" class="btn-edit-sm">👁️ Visa</a>
-                <a href="profile.html" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
+                <a href="detail.php" class="btn-edit-sm">👁️ Visa</a>
+                <a href="profile.php" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
               </div>
             </div>
           </div>
@@ -165,8 +165,8 @@
               <div class="profile-card-title">Havregrynsgröt 2.0</div>
               <div class="profile-card-meta">💸 · ❤️ 77 likes</div>
               <div class="profile-card-actions">
-                <a href="detail.html" class="btn-edit-sm">👁️ Visa</a>
-                <a href="profile.html" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
+                <a href="detail.php" class="btn-edit-sm">👁️ Visa</a>
+                <a href="profile.php" class="btn-delete-sm" title="Ta bort från sparade">📌</a>
               </div>
             </div>
           </div>
