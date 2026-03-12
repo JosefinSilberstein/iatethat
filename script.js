@@ -1,5 +1,80 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  // ── Sök och filterchips i feed ───────────────────────────────────
+  const navSearch = document.getElementById("nav-search");
+  const noResults = document.getElementById("no-results");
+
+  const budgetMap   = { f1: "billigast", f2: "billig", f3: "medel" };
+  const timeMap     = { f4: [0, 15], f5: [16, 30], f6: [31, 999] };
+  const categoryMap = { f7: "pasta", f8: "nudlar", f9: "veg", f10: "ägg", f11: "soppa" };
+
+  function filterCards() {
+    const query = navSearch ? navSearch.value.trim().toLowerCase() : "";
+
+    const activeBudgets    = [];
+    const activeTimes      = [];
+    const activeCategories = [];
+
+    document.querySelectorAll(".chip-check").forEach(function (cb) {
+      if (!cb.checked) return;
+      if (budgetMap[cb.id])   activeBudgets.push(budgetMap[cb.id]);
+      if (timeMap[cb.id])     activeTimes.push(timeMap[cb.id]);
+      if (categoryMap[cb.id]) activeCategories.push(categoryMap[cb.id]);
+    });
+
+    const cards = document.querySelectorAll(".recipe-card");
+    let visibleCount = 0;
+
+    cards.forEach(function (card) {
+      // Sök-match
+      const title  = card.querySelector(".card-title");
+      const desc   = card.querySelector(".card-desc");
+      const author = card.querySelector(".author-name");
+      const pills  = card.querySelectorAll(".meta-pill");
+      let text = "";
+      if (title)  text += title.textContent.toLowerCase() + " ";
+      if (desc)   text += desc.textContent.toLowerCase() + " ";
+      if (author) text += author.textContent.toLowerCase() + " ";
+      pills.forEach(function (p) { text += p.textContent.toLowerCase() + " "; });
+      const matchesSearch = query === "" || text.includes(query);
+
+      // Budget-match
+      const cardBudget   = card.dataset.budget || "";
+      const matchesBudget = activeBudgets.length === 0 || activeBudgets.includes(cardBudget);
+
+      // Tid-match
+      const cardTime = parseInt(card.dataset.time) || 0;
+      let matchesTime = activeTimes.length === 0;
+      activeTimes.forEach(function (range) {
+        if (cardTime >= range[0] && cardTime <= range[1]) matchesTime = true;
+      });
+
+      // Kategori-match
+      const cardTags = (card.dataset.tags || "").split(",");
+      let matchesCategory = activeCategories.length === 0;
+      activeCategories.forEach(function (cat) {
+        if (cardTags.includes(cat)) matchesCategory = true;
+      });
+
+      if (matchesSearch && matchesBudget && matchesTime && matchesCategory) {
+        card.style.display = "";
+        visibleCount++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    if (noResults) {
+      noResults.style.display = visibleCount === 0 ? "block" : "none";
+    }
+  }
+
+  if (navSearch) navSearch.addEventListener("input", filterCards);
+  document.querySelectorAll(".chip-check").forEach(function (cb) {
+    cb.addEventListener("change", filterCards);
+  });
+  filterCards(); // kör en gång vid sidladdning så att filtren stämmer med kryssrutornas startvärden
+
   const imageInput = document.getElementById("img-upload");
 
   if (imageInput) {
@@ -331,6 +406,113 @@ document.addEventListener("DOMContentLoaded", function () {
         item.scrollIntoView({ behavior: "smooth" });
 
       }, 600);
+    });
+  }
+
+  // ── Spara profilinformation ───────────────────────────────────────
+  const btnSaveProfile = document.getElementById("btn-save-profile");
+  const profileMessage = document.getElementById("profile-message");
+
+  if (btnSaveProfile && profileMessage) {
+    btnSaveProfile.addEventListener("click", function () {
+      const username = document.getElementById("s-username").value.trim();
+      const email = document.getElementById("s-email").value.trim();
+      const fel = [];
+
+      if (username === "") fel.push("Användarnamn saknas.");
+      if (email === "") fel.push("E-post saknas.");
+
+      if (fel.length > 0) {
+        profileMessage.className = "error-box";
+        profileMessage.style.display = "block";
+        profileMessage.innerHTML = fel.join("<br>");
+      } else {
+        profileMessage.className = "";
+        profileMessage.style.cssText = "display:block; background:#d1fae5; border:1px solid #6ee7b7; border-radius:8px; padding:10px 16px; color:#065f46;";
+        profileMessage.textContent = "✅ Profilinformation sparad!";
+      }
+    });
+  }
+
+  // ── Uppdatera lösenord ────────────────────────────────────────────
+  const btnUpdatePw = document.getElementById("btn-update-pw");
+  const pwMessage = document.getElementById("pw-message");
+
+  if (btnUpdatePw && pwMessage) {
+    btnUpdatePw.addEventListener("click", function () {
+      const curr = document.getElementById("s-pw-curr").value.trim();
+      const newPw = document.getElementById("s-pw-new").value.trim();
+      const conf = document.getElementById("s-pw-conf").value.trim();
+      const fel = [];
+
+      if (curr === "") fel.push("Ange ditt nuvarande lösenord.");
+      if (newPw === "") fel.push("Ange ett nytt lösenord.");
+      if (newPw.length > 0 && newPw.length < 6) fel.push("Lösenordet måste vara minst 6 tecken.");
+      if (newPw !== conf) fel.push("Lösenorden matchar inte.");
+
+      if (fel.length > 0) {
+        pwMessage.className = "error-box";
+        pwMessage.style.display = "block";
+        pwMessage.innerHTML = fel.join("<br>");
+      } else {
+        pwMessage.className = "";
+        pwMessage.style.cssText = "display:block; background:#d1fae5; border:1px solid #6ee7b7; border-radius:8px; padding:10px 16px; color:#065f46;";
+        pwMessage.textContent = "✅ Lösenordet har uppdaterats!";
+        document.getElementById("s-pw-curr").value = "";
+        document.getElementById("s-pw-new").value = "";
+        document.getElementById("s-pw-conf").value = "";
+      }
+    });
+  }
+
+  // ── Validering: Logga in ──────────────────────────────────────────
+  const btnLogin = document.getElementById("btn-login");
+  const loginError = document.getElementById("login-error");
+
+  if (btnLogin && loginError) {
+    btnLogin.addEventListener("click", function (event) {
+      const email = document.getElementById("login-email").value.trim();
+      const pw = document.getElementById("login-pw").value.trim();
+      const fel = [];
+
+      if (email === "") fel.push("E-post saknas.");
+      if (pw === "") fel.push("Lösenord saknas.");
+
+      if (fel.length > 0) {
+        event.preventDefault();
+        loginError.style.display = "block";
+        loginError.innerHTML = fel.join("<br>");
+      } else {
+        loginError.style.display = "none";
+      }
+    });
+  }
+
+  // ── Validering: Registrera ────────────────────────────────────────
+  const btnRegister = document.getElementById("btn-register");
+  const registerError = document.getElementById("register-error");
+
+  if (btnRegister && registerError) {
+    btnRegister.addEventListener("click", function (event) {
+      const user = document.getElementById("reg-user").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const pw = document.getElementById("reg-pw").value.trim();
+      const pw2 = document.getElementById("reg-pw2").value.trim();
+      const fel = [];
+
+      if (user === "") fel.push("Användarnamn saknas.");
+      if (email === "") fel.push("E-post saknas.");
+      if (pw === "") fel.push("Lösenord saknas.");
+      if (pw.length > 0 && pw.length < 6) fel.push("Lösenordet måste vara minst 6 tecken.");
+      if (pw !== pw2) fel.push("Lösenorden matchar inte.");
+
+      if (fel.length > 0) {
+        event.preventDefault();
+        registerError.style.display = "block";
+        registerError.innerHTML = fel.join("<br>");
+      } else {
+        registerError.style.display = "none";
+      }
     });
   }
 
