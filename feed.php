@@ -12,17 +12,17 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-inner">
-      <a href="feed.html" class="brand">🍜 I ate that</a>
+      <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-search">
         <span>🔍</span>
         <input type="text" placeholder="Sök recept...">
       </div>
       <div class="nav-links">
-        <a href="feed.html"    class="nav-link active">Feed</a>
-        <a href="create.html"  class="nav-link">+ Lägg upp</a>
-        <a href="profile.html" class="nav-link">Min profil</a>
-        <a href="profile.html" class="nav-avatar">L</a>
-        <a href="auth.html"    class="btn-login">Logga ut</a>
+        <a href="feed.php"    class="nav-link active">Feed</a>
+        <a href="create.php"  class="nav-link">+ Lägg upp</a>
+        <a href="profile.php" class="nav-link">Min profil</a>
+        <a href="profile.php" class="nav-avatar">L</a>
+        <a href="auth.php"    class="btn-login">Logga ut</a>
       </div>
     </div>
   </nav>
@@ -36,11 +36,11 @@
         <div class="feed-hero">
           <h1>Vad åt du idag? 🍝</h1>
           <p>Dela studentköksmagi. Inga domar, bara mat.</p>
-          <a href="create.html" class="btn-cta">+ Lägg upp din matsedel</a>
+          <a href="create.php" class="btn-cta">+ Lägg upp din matsedel</a>
         </div>
 
         <!-- KORT 1 -->
-        <a href="detail.html" class="recipe-card">
+        <a href="detail.php" class="recipe-card">
           <div class="card-img">
             🍝
             <span class="card-img-badge">⏰ 15 min</span>
@@ -69,7 +69,7 @@
         </a>
 
         <!-- KORT 2 -->
-        <a href="detail.html" class="recipe-card">
+        <a href="detail.php" class="recipe-card">
           <div class="card-img" style="background: linear-gradient(135deg, #f9d976, #f39f86)">
             🍳
             <span class="card-img-badge">⏰ 10 min</span>
@@ -97,7 +97,7 @@
         </a>
 
         <!-- KORT 3 -->
-        <a href="detail.html" class="recipe-card">
+        <a href="detail.php" class="recipe-card">
           <div class="card-img" style="background: linear-gradient(135deg, #a8e063, #56ab2f)">
             🍜
             <span class="card-img-badge">⏰ 5 min</span>
