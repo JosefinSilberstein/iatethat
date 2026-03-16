@@ -15,7 +15,7 @@
       <a href="feed.php" class="brand">🍜 I ate that</a>
       <div class="nav-search">
         <span>🔍</span>
-        <input type="text" placeholder="Sök recept...">
+        <input id="nav-search" type="text" placeholder="Sök recept...">
       </div>
       <div class="nav-links">
         <a href="feed.php"    class="nav-link active">Feed</a>
@@ -40,7 +40,7 @@
         </div>
 
         <!-- KORT 1 -->
-        <a href="detail.php" class="recipe-card">
+        <a href="detail.php" class="recipe-card" data-budget="billig" data-time="15" data-tags="pasta,veg,snabb">
           <div class="card-img">
             🍝
             <span class="card-img-badge">⏰ 15 min</span>
@@ -69,7 +69,7 @@
         </a>
 
         <!-- KORT 2 -->
-        <a href="detail.php" class="recipe-card">
+        <a href="detail.php" class="recipe-card" data-budget="billigast" data-time="10" data-tags="ägg,budget">
           <div class="card-img" style="background: linear-gradient(135deg, #f9d976, #f39f86)">
             🍳
             <span class="card-img-badge">⏰ 10 min</span>
@@ -97,7 +97,7 @@
         </a>
 
         <!-- KORT 3 -->
-        <a href="detail.php" class="recipe-card">
+        <a href="detail.php" class="recipe-card" data-budget="billigast" data-time="5" data-tags="ramen,nudlar,snabb">
           <div class="card-img" style="background: linear-gradient(135deg, #a8e063, #56ab2f)">
             🍜
             <span class="card-img-badge">⏰ 5 min</span>
@@ -123,6 +123,7 @@
             </div>
           </div>
         </a>
+        <p id="no-results" style="display:none; color: var(--muted); margin-top: 24px;">Inga recept matchade din sökning.</p>
       </main>
 
       <!-- SIDEBAR -->
@@ -217,5 +218,6 @@
     <span style="margin-left: 12px">© 2026 I ate that</span>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>

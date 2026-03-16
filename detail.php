@@ -104,7 +104,7 @@
 
         <a href="#kommentarer" class="int-btn">💬 23 Kommentarer</a>
         <a href="edit.php?id=1" class="int-btn" style="margin-left: auto">✏️ Redigera</a>
-       <a href="remove.php?id=1" class="int-btn-danger">🗑️ Radera</a>
+       <a href="remove.php?id=1" class="int-btn-danger btn-delete-sm">🗑️ Radera</a>
 
       </div>
 
@@ -180,5 +180,6 @@
     <span style="margin-left: 12px">© 2026 I ate that</span>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>
